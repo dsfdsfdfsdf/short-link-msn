@@ -27,6 +27,12 @@
         }
         h1 {
             color: #ff0062;
+            margin-bottom: 20px;
+        }
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
         }
         input[type="text"], textarea {
             width: 100%;
@@ -51,15 +57,39 @@
         .btn:hover {
             background-color: #ff3399;
         }
+        .switch-btns {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        .switch-btn {
+            background-color: #333;
+            color: #ffffff;
+            border: 1px solid #ff0062;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 0 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+        .switch-btn.active {
+            background-color: #ff0062;
+            color: #ffffff;
+        }
         .result {
             margin-top: 20px;
             font-size: 18px;
             color: #a9ffcf;
+            background-color: #333;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
-        .result a, .result p {
+        .result a {
             color: #a9ffcf;
             text-decoration: none;
             word-wrap: break-word;
+            font-weight: bold;
         }
         .copy-btn {
             background-color: #00aaff;
@@ -75,7 +105,6 @@
         .copy-btn:hover {
             background-color: #0099cc;
         }
-        /* استایل فوتر */
         footer {
             margin-top: 20px;
             font-size: 14px;
@@ -93,14 +122,16 @@
 <body>
     <div class="container">
         <h1>کوتاه‌کننده لینک و متن</h1>
-        <select id="input-type" onchange="toggleInputType()">
-            <option value="link">کوتاه کردن لینک</option>
-            <option value="text">کوتاه کردن متن</option>
-        </select>
-        <input type="text" id="url-input" placeholder="لینک خود را وارد کنید">
-        <textarea id="text-input" placeholder="متن خود را وارد کنید" style="display: none;"></textarea>
+        <div class="switch-btns">
+            <button class="switch-btn active" id="link-btn" onclick="toggleInputType('link')">کوتاه کردن لینک</button>
+            <button class="switch-btn" id="text-btn" onclick="toggleInputType('text')">کوتاه کردن متن</button>
+        </div>
+        <div class="input-group">
+            <input type="text" id="url-input" placeholder="لینک خود را وارد کنید">
+            <textarea id="text-input" placeholder="متن خود را وارد کنید" style="display: none;"></textarea>
+        </div>
         <button class="btn" onclick="shortenContent()">کوتاه کن</button>
-        <div class="result" id="result"></div>
+        <div class="result" id="result" style="display: none;"></div>
     </div>
 
     <footer>
@@ -108,17 +139,22 @@
     </footer>
 
     <script>
-        function toggleInputType() {
-            const inputType = document.getElementById("input-type").value;
+        function toggleInputType(type) {
             const urlInput = document.getElementById("url-input");
             const textInput = document.getElementById("text-input");
+            const linkBtn = document.getElementById("link-btn");
+            const textBtn = document.getElementById("text-btn");
 
-            if (inputType === "link") {
+            if (type === "link") {
                 urlInput.style.display = "block";
                 textInput.style.display = "none";
+                linkBtn.classList.add("active");
+                textBtn.classList.remove("active");
             } else {
                 urlInput.style.display = "none";
                 textInput.style.display = "block";
+                linkBtn.classList.remove("active");
+                textBtn.classList.add("active");
             }
         }
 
@@ -127,10 +163,11 @@
         }
 
         function shortenContent() {
-            const inputType = document.getElementById("input-type").value;
+            const inputType = document.querySelector('.switch-btn.active').id;
             const resultContainer = document.getElementById("result");
+            resultContainer.style.display = "none"; // مخفی کردن نتایج قبلی
 
-            if (inputType === "link") {
+            if (inputType === "link-btn") {
                 const url = document.getElementById("url-input").value;
                 if (!url) {
                     alert("لطفاً لینک را وارد کنید.");
@@ -161,6 +198,8 @@
                     <button class="copy-btn" onclick="copyToClipboard('${shortTextURL}')">کپی لینک</button>
                 `;
             }
+
+            resultContainer.style.display = "block"; // نمایش نتایج
         }
 
         function copyToClipboard(text) {
@@ -171,7 +210,6 @@
             });
         }
 
-        // بررسی و نمایش محتوای لینک یا متن
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const contentID = urlParams.get('id');
