@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>کوتاه‌کننده لینک</title>
     <style>
-        /* استایل اصلی صفحه کوتاه‌کننده لینک */
         body {
             background-color: #1a1a1a;
             color: #ffffff;
@@ -14,7 +13,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
         }
         .container {
@@ -47,6 +46,7 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
+            margin-top: 10px;
         }
         .btn:hover {
             background-color: #ff3399;
@@ -60,23 +60,32 @@
             color: #a9ffcf;
             text-decoration: none;
         }
-        /* استایل صفحه میانجی */
-        .interstitial {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            text-align: center;
+        .copy-btn {
+            background-color: #00aaff;
+            color: #ffffff;
+            border: none;
+            padding: 8px 16px;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
         }
-        .interstitial img {
-            max-width: 100%;
-            margin-bottom: 20px;
-            border-radius: 8px;
+        .copy-btn:hover {
+            background-color: #0099cc;
         }
-        .countdown {
-            font-size: 24px;
+        /* استایل فوتر */
+        footer {
+            margin-top: 20px;
+            font-size: 14px;
+            color: #888888;
+        }
+        footer a {
             color: #ff0062;
+            text-decoration: none;
+        }
+        footer a:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
@@ -87,6 +96,10 @@
         <button class="btn" onclick="shortenLink()">کوتاه کن</button>
         <div class="result" id="result"></div>
     </div>
+
+    <footer>
+        طراحی شده توسط <a href="https://example.com" target="_blank">مهدی صدیقی نسب</a>
+    </footer>
 
     <script>
         function generateID() {
@@ -100,13 +113,22 @@
                 return;
             }
 
-            // تولید شناسه کوتاه و ذخیره آن در LocalStorage
             const linkID = generateID();
             localStorage.setItem(linkID, url);
 
-            // نمایش لینک کوتاه‌شده
             const shortURL = `${window.location.href}?id=${linkID}`;
-            document.getElementById("result").innerHTML = `لینک کوتاه شده: <a href="${shortURL}" target="_blank">${shortURL}</a>`;
+            document.getElementById("result").innerHTML = `
+                لینک کوتاه شده: <a href="${shortURL}" target="_blank">${shortURL}</a>
+                <button class="copy-btn" onclick="copyToClipboard('${shortURL}')">کپی لینک</button>
+            `;
+        }
+
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert("لینک کپی شد!");
+            }).catch(err => {
+                alert("خطا در کپی لینک: " + err);
+            });
         }
 
         // بررسی و هدایت به صفحه میانجی
@@ -116,10 +138,11 @@
             if (linkID) {
                 const originalURL = localStorage.getItem(linkID);
                 if (originalURL) {
-                    // ایجاد صفحه میانجی با تایمر ۵ ثانیه‌ای
                     document.body.innerHTML = `
                         <div class="interstitial">
-                            <img src="https://via.placeholder.com/400x200?text=تبلیغات" alt="تبلیغات">
+                            <a href="https://your-ad-link.com" target="_blank">
+                                <img src="https://via.placeholder.com/400x200?text=تبلیغات" alt="تبلیغات" style="width:100%; max-width:400px; margin-top:20px;">
+                            </a>
                             <p class="countdown">۵ ثانیه تا دسترسی به لینک...</p>
                         </div>
                     `;
