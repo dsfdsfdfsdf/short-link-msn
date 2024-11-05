@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>کوتاه‌کننده لینک</title>
+    <title>کوتاه‌کننده لینک و متن</title>
     <style>
         body {
             background-color: #1a1a1a;
@@ -28,7 +28,7 @@
         h1 {
             color: #ff0062;
         }
-        input[type="text"] {
+        input[type="text"], textarea {
             width: 100%;
             padding: 10px;
             border-radius: 5px;
@@ -56,9 +56,10 @@
             font-size: 18px;
             color: #a9ffcf;
         }
-        .result a {
+        .result a, .result p {
             color: #a9ffcf;
             text-decoration: none;
+            word-wrap: break-word;
         }
         .copy-btn {
             background-color: #00aaff;
@@ -91,9 +92,14 @@
 </head>
 <body>
     <div class="container">
-        <h1>کوتاه‌کننده لینک</h1>
-        <input type="text" id="url-input" placeholder="لینک را وارد کنید">
-        <button class="btn" onclick="shortenLink()">کوتاه کن</button>
+        <h1>کوتاه‌کننده لینک و متن</h1>
+        <select id="input-type" onchange="toggleInputType()">
+            <option value="link">کوتاه کردن لینک</option>
+            <option value="text">کوتاه کردن متن</option>
+        </select>
+        <input type="text" id="url-input" placeholder="لینک خود را وارد کنید">
+        <textarea id="text-input" placeholder="متن خود را وارد کنید" style="display: none;"></textarea>
+        <button class="btn" onclick="shortenContent()">کوتاه کن</button>
         <div class="result" id="result"></div>
     </div>
 
@@ -102,25 +108,59 @@
     </footer>
 
     <script>
+        function toggleInputType() {
+            const inputType = document.getElementById("input-type").value;
+            const urlInput = document.getElementById("url-input");
+            const textInput = document.getElementById("text-input");
+
+            if (inputType === "link") {
+                urlInput.style.display = "block";
+                textInput.style.display = "none";
+            } else {
+                urlInput.style.display = "none";
+                textInput.style.display = "block";
+            }
+        }
+
         function generateID() {
             return Math.random().toString(36).substring(2, 8);
         }
 
-        function shortenLink() {
-            const url = document.getElementById("url-input").value;
-            if (!url) {
-                alert("لطفاً لینک را وارد کنید.");
-                return;
+        function shortenContent() {
+            const inputType = document.getElementById("input-type").value;
+            const resultContainer = document.getElementById("result");
+
+            if (inputType === "link") {
+                const url = document.getElementById("url-input").value;
+                if (!url) {
+                    alert("لطفاً لینک را وارد کنید.");
+                    return;
+                }
+
+                const linkID = generateID();
+                localStorage.setItem(linkID, url);
+
+                const shortURL = `${window.location.href}?id=${linkID}`;
+                resultContainer.innerHTML = `
+                    لینک کوتاه شده: <a href="${shortURL}" target="_blank">${shortURL}</a>
+                    <button class="copy-btn" onclick="copyToClipboard('${shortURL}')">کپی لینک</button>
+                `;
+            } else {
+                const text = document.getElementById("text-input").value;
+                if (!text) {
+                    alert("لطفاً متنی وارد کنید.");
+                    return;
+                }
+
+                const textID = generateID();
+                localStorage.setItem(textID, text);
+
+                const shortTextURL = `${window.location.href}?id=${textID}`;
+                resultContainer.innerHTML = `
+                    لینک کوتاه شده برای متن: <a href="${shortTextURL}" target="_blank">${shortTextURL}</a>
+                    <button class="copy-btn" onclick="copyToClipboard('${shortTextURL}')">کپی لینک</button>
+                `;
             }
-
-            const linkID = generateID();
-            localStorage.setItem(linkID, url);
-
-            const shortURL = `${window.location.href}?id=${linkID}`;
-            document.getElementById("result").innerHTML = `
-                لینک کوتاه شده: <a href="${shortURL}" target="_blank">${shortURL}</a>
-                <button class="copy-btn" onclick="copyToClipboard('${shortURL}')">کپی لینک</button>
-            `;
         }
 
         function copyToClipboard(text) {
@@ -131,35 +171,21 @@
             });
         }
 
-        // بررسی و هدایت به صفحه میانجی
+        // بررسی و نمایش محتوای لینک یا متن
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
-            const linkID = urlParams.get('id');
-            if (linkID) {
-                const originalURL = localStorage.getItem(linkID);
-                if (originalURL) {
+            const contentID = urlParams.get('id');
+            if (contentID) {
+                const content = localStorage.getItem(contentID);
+                if (content) {
                     document.body.innerHTML = `
-                        <div class="interstitial">
-                            <a href="https://your-ad-link.com" target="_blank">
-                                <img src="https://via.placeholder.com/400x200?text=تبلیغات" alt="تبلیغات" style="width:100%; max-width:400px; margin-top:20px;">
-                            </a>
-                            <p class="countdown">۵ ثانیه تا دسترسی به لینک...</p>
+                        <div class="container">
+                            <h1>محتوای کوتاه شده</h1>
+                            <div class="result">${content.startsWith('http') ? `<a href="${content}" target="_blank">${content}</a>` : `<p>${content}</p>`}</div>
                         </div>
                     `;
-
-                    let countdown = 5;
-                    const countdownElement = document.querySelector('.countdown');
-                    const timer = setInterval(() => {
-                        countdown--;
-                        countdownElement.textContent = `${countdown} ثانیه تا دسترسی به لینک...`;
-
-                        if (countdown === 0) {
-                            clearInterval(timer);
-                            window.location.href = originalURL;
-                        }
-                    }, 1000);
                 } else {
-                    document.getElementById("result").innerHTML = "لینک معتبر نیست یا منقضی شده است.";
+                    document.getElementById("result").innerHTML = "لینک یا متن معتبر نیست یا منقضی شده است.";
                 }
             }
         }
