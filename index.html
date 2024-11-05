@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>کوتاه‌کننده لینک</title>
+    <style>
+        /* استایل اصلی صفحه کوتاه‌کننده لینک */
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+            background-color: #2b2b2b;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+        h1 {
+            color: #ff0062;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+            margin-bottom: 10px;
+            font-size: 16px;
+            outline: none;
+        }
+        .btn {
+            background-color: #ff0062;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            font-size: 18px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn:hover {
+            background-color: #ff3399;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            color: #a9ffcf;
+        }
+        .result a {
+            color: #a9ffcf;
+            text-decoration: none;
+        }
+        /* استایل صفحه میانجی */
+        .interstitial {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            text-align: center;
+        }
+        .interstitial img {
+            max-width: 100%;
+            margin-bottom: 20px;
+            border-radius: 8px;
+        }
+        .countdown {
+            font-size: 24px;
+            color: #ff0062;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>کوتاه‌کننده لینک</h1>
+        <input type="text" id="url-input" placeholder="لینک را وارد کنید">
+        <button class="btn" onclick="shortenLink()">کوتاه کن</button>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function generateID() {
+            return Math.random().toString(36).substring(2, 8);
+        }
+
+        function shortenLink() {
+            const url = document.getElementById("url-input").value;
+            if (!url) {
+                alert("لطفاً لینک را وارد کنید.");
+                return;
+            }
+
+            // تولید شناسه کوتاه و ذخیره آن در LocalStorage
+            const linkID = generateID();
+            localStorage.setItem(linkID, url);
+
+            // نمایش لینک کوتاه‌شده
+            const shortURL = `${window.location.href}?id=${linkID}`;
+            document.getElementById("result").innerHTML = `لینک کوتاه شده: <a href="${shortURL}" target="_blank">${shortURL}</a>`;
+        }
+
+        // بررسی و هدایت به صفحه میانجی
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const linkID = urlParams.get('id');
+            if (linkID) {
+                const originalURL = localStorage.getItem(linkID);
+                if (originalURL) {
+                    // ایجاد صفحه میانجی با تایمر ۵ ثانیه‌ای
+                    document.body.innerHTML = `
+                        <div class="interstitial">
+                            <img src="https://via.placeholder.com/400x200?text=تبلیغات" alt="تبلیغات">
+                            <p class="countdown">۵ ثانیه تا دسترسی به لینک...</p>
+                        </div>
+                    `;
+
+                    let countdown = 5;
+                    const countdownElement = document.querySelector('.countdown');
+                    const timer = setInterval(() => {
+                        countdown--;
+                        countdownElement.textContent = `${countdown} ثانیه تا دسترسی به لینک...`;
+
+                        if (countdown === 0) {
+                            clearInterval(timer);
+                            window.location.href = originalURL;
+                        }
+                    }, 1000);
+                } else {
+                    document.getElementById("result").innerHTML = "لینک معتبر نیست یا منقضی شده است.";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
