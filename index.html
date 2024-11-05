@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>کوتاه‌کننده لینک و متن</title>
+    <title>کوتاه‌کننده لینک و متن با پسورد اختیاری</title>
     <style>
         body {
             background-color: #1a1a1a;
@@ -34,7 +34,7 @@
             flex-direction: column;
             margin-bottom: 10px;
         }
-        input[type="text"], textarea {
+        input[type="text"], textarea, input[type="password"] {
             width: 100%;
             padding: 10px;
             border-radius: 5px;
@@ -57,54 +57,6 @@
         .btn:hover {
             background-color: #ff3399;
         }
-        .switch-btns {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        .switch-btn {
-            background-color: #333;
-            color: #ffffff;
-            border: 1px solid #ff0062;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 0 5px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .switch-btn.active {
-            background-color: #ff0062;
-            color: #ffffff;
-        }
-        .result {
-            margin-top: 20px;
-            font-size: 18px;
-            color: #a9ffcf;
-            background-color: #333;
-            padding: 15px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-        }
-        .result a {
-            color: #a9ffcf;
-            text-decoration: none;
-            word-wrap: break-word;
-            font-weight: bold;
-        }
-        .copy-btn {
-            background-color: #00aaff;
-            color: #ffffff;
-            border: none;
-            padding: 8px 16px;
-            font-size: 16px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-            margin-top: 10px;
-        }
-        .copy-btn:hover {
-            background-color: #0099cc;
-        }
         footer {
             margin-top: 20px;
             font-size: 14px;
@@ -121,14 +73,11 @@
 </head>
 <body>
     <div class="container">
-        <h1>کوتاه‌کننده لینک و متن</h1>
-        <div class="switch-btns">
-            <button class="switch-btn active" id="link-btn" onclick="toggleInputType('link')">کوتاه کردن لینک</button>
-            <button class="switch-btn" id="text-btn" onclick="toggleInputType('text')">کوتاه کردن متن</button>
-        </div>
+        <h1>کوتاه‌کننده لینک و متن با پسورد اختیاری</h1>
         <div class="input-group">
             <input type="text" id="url-input" placeholder="لینک خود را وارد کنید">
             <textarea id="text-input" placeholder="متن خود را وارد کنید" style="display: none;"></textarea>
+            <input type="password" id="password-input" placeholder="در صورت نیاز پسورد وارد کنید (اختیاری)">
         </div>
         <button class="btn" onclick="shortenContent()">کوتاه کن</button>
         <div class="result" id="result" style="display: none;"></div>
@@ -139,65 +88,44 @@
     </footer>
 
     <script>
-        function toggleInputType(type) {
-            const urlInput = document.getElementById("url-input");
-            const textInput = document.getElementById("text-input");
-            const linkBtn = document.getElementById("link-btn");
-            const textBtn = document.getElementById("text-btn");
-
-            if (type === "link") {
-                urlInput.style.display = "block";
-                textInput.style.display = "none";
-                linkBtn.classList.add("active");
-                textBtn.classList.remove("active");
-            } else {
-                urlInput.style.display = "none";
-                textInput.style.display = "block";
-                linkBtn.classList.remove("active");
-                textBtn.classList.add("active");
-            }
-        }
-
         function generateID() {
             return Math.random().toString(36).substring(2, 8);
         }
 
         function shortenContent() {
-            const inputType = document.querySelector('.switch-btn.active').id;
+            const url = document.getElementById("url-input").value;
+            const text = document.getElementById("text-input").value;
+            const password = document.getElementById("password-input").value;
             const resultContainer = document.getElementById("result");
             resultContainer.style.display = "none"; // مخفی کردن نتایج قبلی
 
-            if (inputType === "link-btn") {
-                const url = document.getElementById("url-input").value;
-                if (!url) {
-                    alert("لطفاً لینک را وارد کنید.");
-                    return;
-                }
-
-                const linkID = generateID();
-                localStorage.setItem(linkID, url);
-
-                const shortURL = `${window.location.href}?id=${linkID}`;
-                resultContainer.innerHTML = `
-                    لینک کوتاه شده: <a href="${shortURL}" target="_blank">${shortURL}</a>
-                    <button class="copy-btn" onclick="copyToClipboard('${shortURL}')">کپی لینک</button>
-                `;
-            } else {
-                const text = document.getElementById("text-input").value;
-                if (!text) {
-                    alert("لطفاً متنی وارد کنید.");
-                    return;
-                }
-
-                const textID = generateID();
-                localStorage.setItem(textID, text);
-
-                const shortTextURL = `${window.location.href}?id=${textID}`;
-                resultContainer.innerHTML = `
-                    لینک کوتاه شده برای متن: <a href="${shortTextURL}" target="_blank">${shortTextURL}</a>
-                    <button class="copy-btn" onclick="copyToClipboard('${shortTextURL}')">کپی لینک</button>
-                `;
+            if (!url && !text) {
+                alert("لطفاً لینک یا متن را وارد کنید.");
+                return;
             }
+
+            if (password && password.length < 6) {
+                alert("پسورد باید حداقل 6 کاراکتر باشد.");
+                return;
+            }
+
+            let contentID;
+            let shortContent;
+
+            if (url) {
+                contentID = generateID();
+                localStorage.setItem(contentID, url);
+                shortContent = `${window.location.href}?id=${contentID}&password=${password}`;
+            } else {
+                contentID = generateID();
+                localStorage.setItem(contentID, text);
+                shortContent = `${window.location.href}?id=${contentID}&password=${password}`;
+            }
+
+            resultContainer.innerHTML = `
+                لینک کوتاه شده: <a href="${shortContent}" target="_blank">${shortContent}</a>
+                <button class="copy-btn" onclick="copyToClipboard('${shortContent}')">کپی لینک</button>
+            `;
 
             resultContainer.style.display = "block"; // نمایش نتایج
         }
@@ -213,15 +141,30 @@
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const contentID = urlParams.get('id');
+            const password = urlParams.get('password');
             if (contentID) {
                 const content = localStorage.getItem(contentID);
                 if (content) {
-                    document.body.innerHTML = `
-                        <div class="container">
-                            <h1>محتوای کوتاه شده</h1>
-                            <div class="result">${content.startsWith('http') ? `<a href="${content}" target="_blank">${content}</a>` : `<p>${content}</p>`}</div>
-                        </div>
-                    `;
+                    if (password) {
+                        const enteredPassword = prompt("لطفاً پسورد را وارد کنید:");
+                        if (enteredPassword === password) {
+                            document.body.innerHTML = `
+                                <div class="container">
+                                    <h1>محتوای کوتاه شده</h1>
+                                    <div class="result">${content.startsWith('http') ? `<a href="${content}" target="_blank">${content}</a>` : `<p>${content}</p>`}</div>
+                                </div>
+                            `;
+                        } else {
+                            alert("پسورد نادرست است.");
+                        }
+                    } else {
+                        document.body.innerHTML = `
+                            <div class="container">
+                                <h1>محتوای کوتاه شده</h1>
+                                <div class="result">${content.startsWith('http') ? `<a href="${content}" target="_blank">${content}</a>` : `<p>${content}</p>`}</div>
+                            </div>
+                        `;
+                    }
                 } else {
                     document.getElementById("result").innerHTML = "لینک یا متن معتبر نیست یا منقضی شده است.";
                 }
