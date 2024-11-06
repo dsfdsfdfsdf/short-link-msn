@@ -242,156 +242,28 @@
         
         @keyframes buttonPulse {
             0%, 100% { transform: scale(1); opacity: 0.5; }
-            50% { transform: scale(1.05); opacity: 0.7; }
+            50% { transform: scale(1.1); opacity: 1; }
         }
-        
-        .particle {
-            position: absolute;
-            background: white;
-            border-radius: 50%;
-            pointer-events: none;
-            opacity: 0;
-        }
-        
+
         footer {
-            position: absolute;
-            bottom: 20px;
-            left: 0;
-            right: 0;
+            margin-top: 3rem;
             text-align: center;
             font-size: 1rem;
-            color: rgba(255, 255, 255, 0.7);
-        }
-        
-        footer span {
-            color: var(--primary);
-            font-weight: bold;
+            color: white;
         }
     </style>
 </head>
 <body>
     <div class="background"></div>
     <div class="container">
-        <div class="hologram"></div>
         <h1>کوتاه کننده لینک و متن</h1>
         <div class="button-container">
-            <a href="/link" class="button">
-                <span class="button-text">کوتاه کننده لینک </span>
-                <div class="button-glow"></div>
-            </a>
-            <a href="#" class="button">
-                <span class="button-text">دکمه دوم</span>
-                <div class="button-glow"></div>
-            </a>
+            <a href="#" class="button"><span class="button-text">کوتاه کردن لینک</span></a>
+            <a href="#" class="button"><span class="button-text">کوتاه کردن متن</span></a>
         </div>
+        <footer>
+            طراحی شده توسط <a href="https://t.me/mehdisedighinasab" target="_blank" style="color: var(--primary); font-weight: bold; text-decoration: none;">مهدی صدیقی نسب</a>
+        </footer>
     </div>
-   <footer>
-    طراحی شده توسط <a href="https://t.me/mehdisedighinasab" target="_blank" style="color: var(--primary); font-weight: bold; text-decoration: none;">مهدی صدیقی نسب</a>
-</footer>
-
-
-    <script>
-        function createParticle(x, y, color) {
-            const particle = document.createElement('div');
-            particle.className = 'particle';
-            document.body.appendChild(particle);
-
-            const size = Math.random() * 5 + 2;
-            particle.style.width = `${size}px`;
-            particle.style.height = `${size}px`;
-            particle.style.background = color;
-
-            const destinationX = x + (Math.random() - 0.5) * 200;
-            const destinationY = y + (Math.random() - 0.5) * 200;
-
-            const animation = particle.animate([
-                {
-                    transform: `translate(${x}px, ${y}px)`,
-                    opacity: 1
-                },
-                {
-                    transform: `translate(${destinationX}px, ${destinationY}px)`,
-                    opacity: 0
-                }
-            ], {
-                duration: Math.random() * 1000 + 500,
-                easing: 'cubic-bezier(0, .9, .57, 1)',
-                delay: Math.random() * 200
-            });
-
-            animation.onfinish = () => {
-                particle.remove();
-            };
-        }
-
-        document.querySelectorAll('.button').forEach(button => {
-            button.addEventListener('mousemove', function(e) {
-                const rect = button.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                for (let i = 0; i < 3; i++) {
-                    const colors = ['#ff0062', '#00ffff', '#ff00ff', '#ffff00'];
-                    const color = colors[Math.floor(Math.random() * colors.length)];
-                    createParticle(e.clientX, e.clientY, color);
-                }
-            });
-            
-            button.addEventListener('mouseenter', function() {
-                button.style.transform = 'translateY(-5px) scale(1.05)';
-            });
-            
-            button.addEventListener('mouseleave', function() {
-                button.style.transform = 'translateY(0) scale(1)';
-            });
-        });
-
-        // Add 3D holographic effect to buttons
-        document.querySelectorAll('.button').forEach(button => {
-            button.addEventListener('mousemove', function(e) {
-                const rect = button.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                const centerX = rect.width / 2;
-                const centerY = rect.height / 2;
-                const maxRotate = 10;
-
-                const rotateY = ((x - centerX) / centerX) * maxRotate;
-                const rotateX = ((centerY - y) / centerY) * maxRotate;
-
-                button.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.05, 1.05, 1.05)`;
-                button.style.boxShadow = `
-                    0 0 30px rgba(255, 0, 98, 0.8),
-                    ${-rotateY}px ${rotateX}px 20px rgba(0, 255, 255, 0.3),
-                    ${rotateY}px ${-rotateX}px 20px rgba(255, 0, 255, 0.3)
-                `;
-            });
-
-            button.addEventListener('mouseleave', function() {
-                button.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
-                button.style.boxShadow = '0 0 20px rgba(255, 0, 98, 0.5)';
-            });
-        });
-
-        // Add holographic effect to the entire container
-        const container = document.querySelector('.container');
-        document.addEventListener('mousemove', function(e) {
-            const rect = container.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-            const centerX = rect.width / 2;
-            const centerY = rect.height / 2;
-            const maxRotate = 5;
-
-            const rotateY = ((x - centerX) / centerX) * maxRotate;
-            const rotateX = ((centerY - y) / centerY) * maxRotate;
-
-            container.style.transform = `perspective(2000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`;
-        });
-
-        document.addEventListener('mouseleave', function() {
-            container.style.transform = 'perspective(2000px) rotateX(0) rotateY(0)';
-        });
-    </script>
 </body>
 </html>
