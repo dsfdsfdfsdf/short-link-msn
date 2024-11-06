@@ -132,7 +132,7 @@
 
             if (userText !== "") {
                 const uniqueId = generateRandomString(8);
-                const shortLink = window.location.pathname.replace('index.html', '') + 'display.html?id=' + uniqueId;
+                const shortLink = window.location.pathname.replace('text.html', '') + 'display.html?id=' + uniqueId;
 
                 localStorage.setItem(uniqueId, userText);
 
