@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ایجاد لینک کوتاه</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: #fff;
+            line-height: 1.6;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: #333;
+            padding: 30px;
+            border-radius: 10px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #ff0062;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 150px;
+            padding: 15px;
+            font-size: 16px;
+            border: 2px solid #555;
+            border-radius: 8px;
+            background-color: #222;
+            color: #fff;
+            resize: none;
+            margin-bottom: 20px;
+            outline: none;
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            background-color: #ff0062;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #d5004f;
+        }
+
+        .short-link {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .short-link button {
+            font-size: 18px;
+            color: #ff0062;
+            background-color: #333;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        footer {
+            text-align: center;
+            color: #fff;
+            padding: 10px 0;
+            margin-top: auto;
+            background-color: #1e1e1e;
+        }
+
+        footer a {
+            color: #ff0062;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>ایجاد لینک کوتاه</h1>
+        <textarea id="user-text" placeholder="متن خود را وارد کنید..."></textarea>
+        <button id="generate-link">ایجاد لینک کوتاه</button>
+
+        <div class="short-link" id="short-link-container" style="display: none;">
+            <button id="short-link-btn">باز کردن لینک کوتاه</button>
+        </div>
+    </div>
+
+    <footer>
+        طراحی شده توسط <a href="https://t.me/mehdisedighinasab" target="_blank">مهدی صدیقی نسب</a>
+    </footer>
+
+    <script>
+        function generateRandomString(length) {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += characters.charAt(Math.floor(Math.random() * characters.length));
+            }
+            return result;
+        }
+
+        document.getElementById('generate-link').addEventListener('click', function() {
+            var userText = document.getElementById('user-text').value.trim();
+
+            if (userText !== "") {
+                const uniqueId = generateRandomString(8);
+                const shortLink = window.location.pathname.replace('index.html', '') + 'display.html?id=' + uniqueId;
+
+                localStorage.setItem(uniqueId, userText);
+
+                document.getElementById('short-link-btn').onclick = function() {
+                    window.open(shortLink, '_blank'); // باز کردن لینک در برگه جدید
+                };
+
+                document.getElementById('short-link-container').style.display = 'block';
+            } else {
+                alert("لطفاً یک متن وارد کنید.");
+            }
+        });
+    </script>
+
+</body>
+</html>
