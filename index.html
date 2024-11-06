@@ -3,220 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>کوتاه‌کننده لینک و متن</title>
+    <title>کوتاه‌کننده لینک</title>
     <style>
         body {
-            background-color: #1a1a1a;
+            background-color: #121212;
             color: #ffffff;
-            font-family: Arial, sans-serif;
+            font-family: 'Arial', sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
+            height: 100vh;
             margin: 0;
         }
         .container {
             text-align: center;
             background-color: #2b2b2b;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            max-width: 400px;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
             width: 100%;
+            max-width: 500px;
         }
         h1 {
             color: #ff0062;
+            font-size: 28px;
             margin-bottom: 20px;
         }
-        .input-group {
-            display: flex;
-            flex-direction: column;
-            margin-bottom: 10px;
-        }
-        input[type="text"], textarea {
+        input[type="text"] {
             width: 100%;
-            padding: 10px;
-            border-radius: 5px;
-            border: none;
-            margin-bottom: 10px;
+            padding: 14px;
+            border-radius: 8px;
+            border: 1px solid #444;
+            background-color: #333;
+            color: #ffffff;
             font-size: 16px;
+            margin-bottom: 20px;
             outline: none;
+            transition: background-color 0.3s;
+        }
+        input[type="text"]:focus {
+            background-color: #555;
         }
         .btn {
             background-color: #ff0062;
             color: #ffffff;
             border: none;
-            padding: 10px 20px;
+            padding: 14px 30px;
             font-size: 18px;
-            border-radius: 5px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s;
-            margin-top: 10px;
+            transition: background-color 0.3s, transform 0.3s;
+            display: inline-block;
+            margin-top: 20px;
         }
         .btn:hover {
             background-color: #ff3399;
-        }
-        .switch-btns {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 20px;
-        }
-        .switch-btn {
-            background-color: #333;
-            color: #ffffff;
-            border: 1px solid #ff0062;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            margin: 0 5px;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .switch-btn.active {
-            background-color: #ff0062;
-            color: #ffffff;
+            transform: scale(1.05);
         }
         .result {
-            margin-top: 20px;
+            margin-top: 30px;
             font-size: 18px;
             color: #a9ffcf;
-            display: flex;
-            align-items: center;
-            justify-content: space-between; /* Align items in the result */
+            display: none;
+        }
+        .result-button {
+            margin-top: 30px;
+            background-color: #ff0062;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 8px;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+            display: inline-block;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+        .result-button:hover {
+            background-color: #ff3399;
+            transform: scale(1.05);
         }
         .copy-btn {
-            background-color: #00aaff;
-            color: #ffffff;
+            background-color: #444;
+            color: #fff;
+            padding: 12px 24px;
+            border-radius: 8px;
             border: none;
-            padding: 8px 16px;
-            font-size: 16px;
-            border-radius: 5px;
+            font-size: 18px;
             cursor: pointer;
-            transition: background-color 0.3s;
+            margin-top: 20px;
+            transition: background-color 0.3s, transform 0.3s;
         }
         .copy-btn:hover {
-            background-color: #0099cc;
-        }
-        footer {
-            margin-top: 20px;
-            font-size: 14px;
-            color: #888888;
-        }
-        footer a {
-            color: #ff0062;
-            text-decoration: none;
-        }
-        footer a:hover {
-            text-decoration: underline;
+            background-color: #ff0062;
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>کوتاه‌کننده لینک و متن</h1>
-        <div class="switch-btns">
-            <button class="switch-btn active" id="link-btn" onclick="toggleInputType('link')">کوتاه کردن لینک</button>
-            <button class="switch-btn" id="text-btn" onclick="toggleInputType('text')">کوتاه کردن متن</button>
-        </div>
-        <div class="input-group">
-            <input type="text" id="url-input" placeholder="لینک خود را وارد کنید">
-            <textarea id="text-input" placeholder="متن خود را وارد کنید" style="display: none;"></textarea>
-            <input type="text" id="password-input" placeholder="پسورد اختیاری">
-        </div>
-        <button class="btn" onclick="shortenContent()">کوتاه کن</button>
-        <div class="result" id="result" style="display: none;">
-            <button class="copy-btn" id="copy-btn" onclick="copyToClipboard('')">کپی لینک</button>
+        <h1>کوتاه‌کننده لینک</h1>
+        <input type="text" id="url-input" placeholder="لینک را وارد کنید">
+        <button class="btn" onclick="shortenLink()">کوتاه کن</button>
+        <div class="result" id="result">
+            <button class="copy-btn" id="copy-btn" onclick="copyLink()">کپی لینک کوتاه‌شده</button>
         </div>
     </div>
 
-    <footer>
-        طراحی شده توسط <a href="https://example.com" target="_blank">مهدی صدیقی نسب</a>
-    </footer>
-
     <script>
-        function toggleInputType(type) {
-            const urlInput = document.getElementById("url-input");
-            const textInput = document.getElementById("text-input");
-            const passwordInput = document.getElementById("password-input");
-            const linkBtn = document.getElementById("link-btn");
-            const textBtn = document.getElementById("text-btn");
-
-            if (type === "link") {
-                urlInput.style.display = "block";
-                textInput.style.display = "none";
-                linkBtn.classList.add("active");
-                textBtn.classList.remove("active");
-            } else {
-                urlInput.style.display = "none";
-                textInput.style.display = "block";
-                linkBtn.classList.remove("active");
-                textBtn.classList.add("active");
-            }
-            passwordInput.style.display = "block"; // Show password input for both types
-        }
-
         function generateID() {
             return Math.random().toString(36).substring(2, 8);
         }
 
-        function shortenContent() {
-            const inputType = document.querySelector('.switch-btn.active').id;
-            const resultContainer = document.getElementById("result");
-            resultContainer.style.display = "none"; // مخفی کردن نتایج قبلی
-
-            const password = document.getElementById("password-input").value; // Get password input
-
-            if (inputType === "link-btn") {
-                const url = document.getElementById("url-input").value;
-                if (!url) {
-                    alert("لطفاً لینک را وارد کنید.");
-                    return;
-                }
-
-                const linkID = generateID();
-                localStorage.setItem(linkID, url);
-
-                const shortURL = `${window.location.href}?id=${linkID}`;
-                document.getElementById("copy-btn").onclick = () => copyToClipboard(shortURL); // کپی لینک کوتاه شده
-            } else {
-                const text = document.getElementById("text-input").value;
-                if (!text) {
-                    alert("لطفاً متنی وارد کنید.");
-                    return;
-                }
-
-                const textID = generateID();
-                localStorage.setItem(textID, text);
-
-                const shortTextURL = `${window.location.href}?id=${textID}`;
-                document.getElementById("copy-btn").onclick = () => copyToClipboard(shortTextURL); // کپی لینک متن
+        function shortenLink() {
+            const url = document.getElementById("url-input").value;
+            if (!url) {
+                alert("لطفاً لینک را وارد کنید.");
+                return;
             }
 
-            resultContainer.style.display = "flex"; // نمایش نتایج
+            // تولید شناسه کوتاه و ذخیره آن در LocalStorage
+            const linkID = generateID();
+            localStorage.setItem(linkID, url);
+
+            // ایجاد لینک کوتاه
+            const shortURL = `${window.location.href}?id=${linkID}`;
+
+            // نمایش دکمه کپی لینک کوتاه‌شده
+            const copyButton = document.getElementById("copy-btn");
+            copyButton.setAttribute("data-clipboard-text", shortURL);
+
+            document.getElementById("result").style.display = "block";
         }
 
-        function copyToClipboard(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                alert("لینک کپی شد!");
-            }).catch(err => {
-                alert("خطا در کپی لینک: " + err);
+        function copyLink() {
+            const shortURL = document.getElementById("copy-btn").getAttribute("data-clipboard-text");
+
+            // استفاده از Clipboard API برای کپی کردن لینک
+            navigator.clipboard.writeText(shortURL).then(function() {
+                alert("لینک کوتاه‌شده کپی شد!");
+            }).catch(function(err) {
+                alert("خطا در کپی کردن لینک: " + err);
             });
         }
 
+        // بررسی و هدایت لینک کوتاه‌شده در صورت وجود پارامتر id
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
-            const contentID = urlParams.get('id');
-            if (contentID) {
-                const content = localStorage.getItem(contentID);
-                if (content) {
-                    document.body.innerHTML = `
-                        <div class="container">
-                            <h1>محتوای کوتاه شده</h1>
-                            <div class="result">${content.startsWith('http') ? `<a href="${content}" target="_blank">${content}</a>` : `<p>${content}</p>`}</div>
-                        </div>
-                    `;
+            const linkID = urlParams.get('id');
+            if (linkID) {
+                const originalURL = localStorage.getItem(linkID);
+                if (originalURL) {
+                    window.location.href = originalURL;
                 } else {
-                    document.getElementById("result").innerHTML = "محتوا یافت نشد.";
+                    document.getElementById("result").innerHTML = "لینک معتبر نیست یا منقضی شده است.";
                 }
             }
         }
