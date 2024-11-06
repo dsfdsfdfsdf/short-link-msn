@@ -98,6 +98,15 @@
             background-color: #ff0062;
             transform: scale(1.05);
         }
+        footer {
+            margin-top: 40px;
+            color: #ffffff;
+            text-align: center;
+        }
+        footer a {
+            color: #ff0062;
+            text-decoration: none;
+        }
     </style>
 </head>
 <body>
@@ -109,6 +118,11 @@
             <button class="copy-btn" id="copy-btn" onclick="copyLink()">کپی لینک کوتاه‌شده</button>
         </div>
     </div>
+
+    <footer>
+        طراحی شده توسط 
+        <a href="https://t.me/mehdisedighinasab" target="_blank">مهدی صدیقی نسب</a>
+    </footer>
 
     <script>
         function generateID() {
@@ -122,14 +136,11 @@
                 return;
             }
 
-            // تولید شناسه کوتاه و ذخیره آن در LocalStorage
             const linkID = generateID();
             localStorage.setItem(linkID, url);
 
-            // ایجاد لینک کوتاه
             const shortURL = `${window.location.href}?id=${linkID}`;
 
-            // نمایش دکمه کپی لینک کوتاه‌شده
             const copyButton = document.getElementById("copy-btn");
             copyButton.setAttribute("data-clipboard-text", shortURL);
 
@@ -139,7 +150,6 @@
         function copyLink() {
             const shortURL = document.getElementById("copy-btn").getAttribute("data-clipboard-text");
 
-            // استفاده از Clipboard API برای کپی کردن لینک
             navigator.clipboard.writeText(shortURL).then(function() {
                 alert("لینک کوتاه‌شده کپی شد!");
             }).catch(function(err) {
@@ -147,7 +157,6 @@
             });
         }
 
-        // بررسی و هدایت لینک کوتاه‌شده در صورت وجود پارامتر id
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const linkID = urlParams.get('id');
