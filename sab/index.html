@@ -292,10 +292,11 @@
             }, 1000);
         }
 
-        // مدیریت روتینگ لینک‌ها
+        // اصلاح روتینگ برای لینک‌های کوتاه
         const pathParts = window.location.pathname.split('/');
-        if (pathParts[2] === 's' && pathParts[3]) {
-            const originalUrl = linksDB[pathParts[3]];
+        // مسیر باید به شکل /sab/{id} باشد
+        if (pathParts[1] === 'sab' && pathParts[2]) {
+            const originalUrl = linksDB[pathParts[2]];
             if (originalUrl) {
                 window.location.href = originalUrl;
             } else {
