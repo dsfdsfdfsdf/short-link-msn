@@ -2,16 +2,16 @@
 <html lang="fa" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔗 سرویس لینک ویژه - هیدفای</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>🚀 سرویس لینک ویژه - هیدفای</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23fff'/><path d='M50 20L30 60h40L50 20zm0 45a5 5 0 110-10 5 5 0 010 10z' fill='%23000'/></svg>">
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;500;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --primary: #FF0062;
-            --secondary: #ffffff;
+            --secondary: #7C4DFF;
             --bg: #0a0a0a;
-            --footer-bg: rgba(15, 15, 15, 0.9);
+            --text: #ffffff;
         }
 
         * {
@@ -29,332 +29,247 @@
             align-items: center;
             overflow: hidden;
             position: relative;
+            color: var(--text);
         }
 
-        .nebula {
+        .gradient-bg {
             position: absolute;
             width: 200vw;
             height: 200vh;
             background: radial-gradient(circle at 50% 50%, 
                 var(--primary) 0%, 
-                transparent 70%);
-            animation: nebula-pulse 20s infinite alternate;
+                var(--secondary) 50%, 
+                transparent 100%);
+            animation: gradient-pulse 15s infinite alternate;
             filter: blur(100px);
-            opacity: 0.3;
+            opacity: 0.2;
         }
 
-        @keyframes nebula-pulse {
+        @keyframes gradient-pulse {
             0% { transform: scale(1); }
-            100% { transform: scale(1.2); }
+            100% { transform: scale(1.5); }
         }
 
-        .cyber-container {
-            background: rgba(10, 10, 10, 0.95);
-            border-radius: 20px;
-            padding: 40px;
+        .main-container {
+            background: rgba(15, 15, 15, 0.95);
+            border-radius: 25px;
+            padding: 2rem;
             width: 95%;
-            max-width: 600px;
-            position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 0 50px rgba(255, 0, 98, 0.2);
+            max-width: 500px;
+            margin: 1rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 50px rgba(255,0,98,0.1);
             backdrop-filter: blur(15px);
-            transform: perspective(1000px) rotateX(0deg) rotateY(0deg);
-            transition: transform 0.3s;
-        }
-
-        .cyber-container:hover {
-            transform: perspective(1000px) rotateX(1deg) rotateY(1deg);
+            position: relative;
+            z-index: 2;
         }
 
         h1 {
-            color: #fff;
             text-align: center;
-            margin-bottom: 40px;
-            font-weight: 700;
-            font-size: 2.5em;
-            position: relative;
-            text-shadow: 0 0 15px var(--primary);
+            margin: 1.5rem 0;
+            font-size: 1.8rem;
+            background: linear-gradient(45deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        h1::after {
-            content: '';
-            position: absolute;
-            bottom: -10px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 60%;
-            height: 3px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        .input-box {
+            margin: 1.5rem 0;
         }
 
-        .input-field {
-            position: relative;
-            margin-bottom: 30px;
-        }
-
-        .input-field input {
+        input {
             width: 100%;
-            padding: 18px 30px;
-            background: rgba(255, 255, 255, 0.05);
-            border: 2px solid rgba(255, 255, 255, 0.1);
+            padding: 1rem;
+            border: 2px solid rgba(255,255,255,0.1);
             border-radius: 15px;
-            color: #fff;
-            font-size: 18px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(255,255,255,0.05);
+            color: var(--text);
+            font-size: 1rem;
+            transition: all 0.3s ease;
         }
 
-        .input-field input:focus {
+        input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 25px var(--primary);
-            background: rgba(255, 255, 255, 0.08);
+            box-shadow: 0 0 20px rgba(255,0,98,0.3);
         }
 
-        .cyber-button {
+        .generate-btn {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 15px;
             background: linear-gradient(45deg, var(--primary), var(--secondary));
             color: white;
-            border: none;
-            padding: 18px 40px;
-            border-radius: 15px;
-            cursor: pointer;
-            font-size: 18px;
             font-weight: 700;
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
-            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0 100%);
+            cursor: pointer;
+            transition: transform 0.3s ease;
         }
 
-        .cyber-button::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, 
-                transparent 25%, 
-                rgba(255, 255, 255, 0.2) 50%, 
-                transparent 75%);
-            animation: cyber-glow 3s infinite linear;
+        .generate-btn:hover {
+            transform: translateY(-2px);
         }
 
-        @keyframes cyber-glow {
-            0% { transform: rotate(0deg) translateX(-50%); }
-            100% { transform: rotate(360deg) translateX(-50%); }
-        }
-
-        .cyber-button:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 10px 30px rgba(255, 0, 98, 0.4);
-        }
-
-        .hologram-result {
-            margin-top: 30px;
-            padding: 25px;
-            background: linear-gradient(145deg, 
-                rgba(255, 0, 98, 0.1), 
-                rgba(0, 240, 255, 0.1));
+        .result-box {
+            margin-top: 2rem;
+            padding: 1.5rem;
+            background: rgba(0,0,0,0.3);
             border-radius: 15px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
             display: none;
-            position: relative;
-            backdrop-filter: blur(10px);
-            animation: hologram-float 3s ease-in-out infinite;
-        }
-
-        @keyframes hologram-float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-5px); }
         }
 
         .short-url {
-            color: var(--secondary);
-            font-size: 1.2em;
             word-break: break-all;
-            text-shadow: 0 0 10px rgba(0, 240, 255, 0.5);
-            margin-bottom: 20px;
-            padding: 10px;
-            background: rgba(0,0,0,0.7);
+            padding: 1rem;
+            background: rgba(255,255,255,0.05);
             border-radius: 10px;
-            border: 2px solid white;
+            margin-bottom: 1rem;
         }
 
-        .action-buttons {
+        .action-btns {
             display: grid;
+            gap: 1rem;
             grid-template-columns: 1fr 1fr;
-            gap: 15px;
         }
 
-        .cyber-action-btn {
-            padding: 12px;
+        .action-btn {
+            padding: 0.8rem;
+            border: none;
             border-radius: 10px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            border: 2px solid white;
             background: rgba(255,255,255,0.1);
-            color: white !important;
-            position: relative;
-        }
-
-        .cyber-action-btn::before {
-            content: '';
-            position: absolute;
-            top: -2px;
-            left: -2px;
-            right: -2px;
-            bottom: -2px;
-            border: 2px solid white;
-            border-radius: 10px;
-            opacity: 0.5;
-        }
-
-        .hydra-btn {
-            background: var(--primary) !important;
-        }
-
-        footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--footer-bg);
-            padding: 15px;
-            text-align: center;
-            backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(255,255,255,0.1);
-        }
-
-        .footer-link {
-            color: var(--primary);
-            text-decoration: none;
-            font-weight: 500;
+            color: white;
+            cursor: pointer;
             transition: all 0.3s ease;
         }
 
-        .footer-link:hover {
-            color: var(--secondary);
-            text-shadow: 0 0 5px var(--primary);
+        .action-btn:hover {
+            background: var(--primary);
         }
 
         .donate-btn {
             position: fixed;
-            top: 20px;
-            right: 20px;
+            bottom: 20px;
+            left: 20px;
             background: var(--primary);
             color: white;
-            padding: 12px 25px;
+            padding: 0.8rem 1.5rem;
             border-radius: 25px;
             text-decoration: none;
             font-weight: 500;
             box-shadow: 0 4px 15px rgba(255,0,98,0.3);
-            transition: all 0.3s ease;
-            z-index: 1000;
         }
 
-        .donate-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(255,0,98,0.5);
+        footer {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            color: white;
+            font-size: 0.9rem;
+            background: rgba(255,255,255,0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+        }
+
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 1.5rem;
+                margin: 1rem;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .donate-btn, footer {
+                font-size: 0.8rem;
+                padding: 0.6rem 1rem;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="nebula"></div>
+    <div class="gradient-bg"></div>
     
-    <div class="cyber-container">
-        <h1>🔮 سرویس لینک‌های کیهانی</h1>
+    <div class="main-container">
+        <h1>🔗 ایجاد لینک سابسکریپشن</h1>
         
-        <div class="input-field">
+        <div class="input-box">
             <input 
                 type="url" 
                 id="originalUrl" 
-                placeholder="لینک خود را وارد کنید..."
+                placeholder="لینک سابسکریپشن را وارد کنید..."
                 autocomplete="off"
                 spellcheck="false"
             >
         </div>
 
-        <button class="cyber-button" onclick="generateShortLink()">
-            <span class="button-text">🪄 ایجاد پیوند کوانتومی</span>
-        </button>
+        <button class="generate-btn" onclick="generateLink()">✨ ایجاد لینک ویژه</button>
 
-        <div class="hologram-result" id="result">
+        <div class="result-box" id="result">
             <div class="short-url" id="shortUrl"></div>
-            <div class="action-buttons">
-                <button class="cyber-action-btn copy-btn" onclick="copyUrl()">📡 کپی هولوگرام</button>
-                <button class="cyber-action-btn hydra-btn" onclick="openInHydra()">🚀 باز کردن در هیدفای</button>
+            <div class="action-btns">
+                <button class="action-btn" onclick="copyLink()">📋 کپی لینک</button>
+                <button class="action-btn" onclick="openInApp()">🚀 بازکردن در برنامه</button>
             </div>
         </div>
     </div>
 
-    <!-- دکمه Donate -->
-    <a href="https://example.com/donate" target="_blank" class="donate-btn">Donate</a>
+    <a href="https://example.com/donate" target="_blank" class="donate-btn">DONATE</a>
 
-    <!-- فوتر -->
     <footer>
         طراحی شده توسط 
-        <a href="https://example.com/mehdi" target="_blank" class="footer-link">
-            مهدی صدیقی نسب
-        </a>
+        <span style="color: var(--primary); font-weight: 700;">مهدی صدیقی نسب</span>
     </footer>
 
     <script>
-        const HIDDIFY_DOWNLOAD_URL = "https://github.com/hiddify/hiddify-app/";
-        const HIDDIFY_SCHEME = "hiddify://add-config?url=";
-        const BASE_URL = window.location.origin;
+        const APP_SCHEME = 'hiddify://add-config?url=';
+        const BASE_URL = window.location.origin + '/sab/s/';
         let linksDB = JSON.parse(localStorage.getItem('linksDB')) || {};
 
-        function generateQuantumId() {
-            return Date.now().toString(36) + Math.random().toString(36).substr(2, 4);
+        function generateId() {
+            return Math.random().toString(36).substr(2, 9);
         }
 
-        function generateShortLink() {
+        function generateLink() {
             const originalUrl = document.getElementById('originalUrl').value;
-            if(!originalUrl) return;
+            if (!originalUrl) return;
 
-            const quantumId = generateQuantumId();
-            const shortUrl = `${BASE_URL}/?s=${quantumId}`;
+            const id = generateId();
+            const shortUrl = BASE_URL + id;
             
-            linksDB[quantumId] = originalUrl;
+            linksDB[id] = originalUrl;
             localStorage.setItem('linksDB', JSON.stringify(linksDB));
 
             document.getElementById('shortUrl').textContent = shortUrl;
             document.getElementById('result').style.display = 'block';
         }
 
-        function copyUrl() {
+        function copyLink() {
             navigator.clipboard.writeText(document.getElementById('shortUrl').textContent)
-                .then(() => {
-                    const btn = document.querySelector('.copy-btn');
-                    btn.textContent = '✅ کپی موفق!';
-                    setTimeout(() => btn.textContent = '📡 کپی هولوگرام', 2000);
-                });
+                .then(() => alert('✅ لینک با موفقیت کپی شد!'));
         }
 
-        function openInHydra() {
-            const shortUrl = document.getElementById('shortUrl').textContent;
-            const hydraDeepLink = `${HIDDIFY_SCHEME}${encodeURIComponent(shortUrl)}`;
-            
-            window.location.href = hydraDeepLink;
+        function openInApp() {
+            const url = encodeURIComponent(document.getElementById('shortUrl').textContent);
+            window.location.href = APP_SCHEME + url;
             
             setTimeout(() => {
-                if(!document.hidden) {
-                    const result = confirm("اپ هیدفای نصب نیست! برای دانلود کلیک کنید");
-                    if(result) {
-                        window.open(HIDDIFY_DOWNLOAD_URL, '_blank');
+                if (!document.hidden) {
+                    if(confirm('برنامه یافت نشد! میخواهید دانلود کنید؟')) {
+                        window.open('https://github.com/hiddify/hiddify-app/', '_blank');
                     }
                 }
             }, 1000);
         }
 
-        const urlParams = new URLSearchParams(window.location.search);
-        if(urlParams.has('s')) {
-            const shortId = urlParams.get('s');
-            const originalUrl = linksDB[shortId];
-            if(originalUrl) {
+        // Handle URL Routing
+        const pathParts = window.location.pathname.split('/');
+        if (pathParts[2] === 's' && pathParts[3]) {
+            const originalUrl = linksDB[pathParts[3]];
+            if (originalUrl) {
                 window.location.href = originalUrl;
             } else {
-                document.body.innerHTML = `<h1 style="color:white">لینک نامعتبر است!</h1>`;
+                document.body.innerHTML = '<h1 style="color:white;text-align:center;margin-top:50px">لینک نامعتبر است!</h1>';
             }
         }
     </script>
